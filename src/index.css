@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Smooth theme transition */
+* {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-duration: 180ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Avoid transitioning transforms during hover on data-dense rows */
+.no-tx,
+.no-tx * {
+  transition: none !important;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
+  background-clip: content-box;
+}
+
+/* Indeterminate progress bar helper */
+.indeterminate-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: currentColor;
+  border-radius: inherit;
+  animation: progressIndeterminate 1.8s ease-in-out infinite;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-ink-200/70 bg-white shadow-elev-1 dark:border-ink-800 dark:bg-ink-900;
+  }
+  .card-header {
+    @apply flex items-center justify-between gap-4 border-b border-ink-200/70 px-5 py-4 dark:border-ink-800;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-all duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-primary-600 text-white hover:bg-primary-700 shadow-elev-1 hover:shadow-elev-2;
+  }
+  .btn-secondary {
+    @apply border border-ink-200 bg-white text-ink-700 hover:bg-ink-50 dark:border-ink-700 dark:bg-ink-800 dark:text-ink-200 dark:hover:bg-ink-700;
+  }
+  .btn-ghost {
+    @apply text-ink-600 hover:bg-ink-100 hover:text-ink-900 dark:text-ink-300 dark:hover:bg-ink-800 dark:hover:text-white;
+  }
+  .btn-danger {
+    @apply bg-danger-600 text-white hover:bg-danger-700 shadow-elev-1;
+  }
+  .btn-warning {
+    @apply bg-warning-500 text-white hover:bg-warning-600 shadow-elev-1;
+  }
+  .input {
+    @apply w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900 placeholder:text-ink-400 transition focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 dark:border-ink-700 dark:bg-ink-950 dark:text-ink-100 dark:placeholder:text-ink-500;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-ink-500 dark:text-ink-400;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold;
+  }
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150;
+  }
+}
+
+/* Subtle marquee for streaming queue */
+.stream-track {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+/* ===== Maintenance banner marquee ===== */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ===== Print styles ===== */
+@media print {
+  /* Hide non-essential chrome */
+  .print\:hidden,
+  nav,
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Reset layout for full-width print */
+  body,
+  #root {
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  main {
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  .flex.h-screen,
+  .flex.min-h-screen {
+    height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  /* Stretch content to full width */
+  .mx-auto,
+  .max-w-\[1920px\] {
+    max-width: 100% !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  /* Cards: remove shadows, add borders for print clarity */
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Tables: avoid breaking rows across pages */
+  table {
+    width: 100% !important;
+    break-inside: auto;
+  }
+  thead {
+    display: table-header-group;
+  }
+  tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  tfoot {
+    display: table-footer-group;
+  }
+
+  /* Metric cards and stat boxes stay together */
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Force light theme for readability */
+  .dark {
+    --tw-bg-opacity: 1;
+    background-color: white !important;
+    color: #1a1a1a !important;
+  }
+  .dark * {
+    color: inherit !important;
+    background-color: transparent !important;
+    border-color: #ccc !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm;
+  }
+}
