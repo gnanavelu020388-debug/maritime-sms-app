@@ -86,7 +86,7 @@ export function AuthView() {
                 {error}
               </div>
             )}
-            <button type="submit" disabled={busy} className="btn-primary w-full justify-center">
+            <button type="submit" disabled={busy} className="btn-primary w-full flex justify-center">
               {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === 'login' ? <><Shield className="h-4 w-4" /> Sign In</> : <><Building2 className="h-4 w-4" /> Create Account</>}
             </button>
           </form>
